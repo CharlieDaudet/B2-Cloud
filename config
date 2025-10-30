@@ -1,0 +1,13 @@
+Host az1
+    Hostname 20.188.39.90
+    User azureuser
+    IdentitiesOnly yes
+    ForwardAgent yes
+    IdentityFile C:/Users/asus/.ssh/cloud_tp
+
+Host az2
+    Hostname 10.0.0.5
+    User azureuser
+    ProxyJump az1
+    IdentitiesOnly yes
+    IdentityFile C:/Users/asus/.ssh/cloud_tp
