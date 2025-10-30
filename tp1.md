@@ -293,3 +293,55 @@ See "man sudo_root" for details.
 ### 1. Machine azure2.tp1
 
 🌞 Installer MySQL/MariaDB sur azure2.tp1
+
+```bash 
+azureuser@azure2:~$ sudo atp update
+
+sudo apt install -y mariadb-server
+```
+
+🌞 Démarrer le service MySQL/MariaDB sur azure2.tp1
+
+```bash
+ azureuser@azure2:~$ sudo systemctl start mariadb.service
+ ```
+
+ 🌞 Ajouter un utilisateur dans la base de données pour que mon app puisse s'y connecter
+
+ ```bash 
+azureuser@azure2:~$ sudo mysql
+Welcome to the MariaDB monitor.  Commands end with ; or \g.
+Your MariaDB connection id is 31
+Server version: 10.11.13-MariaDB-0ubuntu0.24.04.1 Ubuntu 24.04
+
+Copyright (c) 2000, 2018, Oracle, MariaDB Corporation Ab and others.
+
+Type 'help;' or '\h' for help. Type '\c' to clear the current input statement.
+
+MariaDB [(none)]> CREATE DATABASE meow_database;
+Query OK, 1 row affected (0.001 sec)
+
+MariaDB [(none)]> CREATE USER 'meow'@'%' IDENTIFIED BY 'meow';
+Query OK, 0 rows affected (0.004 sec)
+
+MariaDB [(none)]> GRANT ALL ON meow_database.* TO 'meow'@'%';
+Query OK, 0 rows affected (0.004 sec)
+
+MariaDB [(none)]> FLUSH PRIVILEGES;
+Query OK, 0 rows affected (0.000 sec)
+
+```
+
+🌞 Ouvrez un port firewall si nécessaire
+
+
+```bash 
+
+sudo ss -lntp
+State  Recv-Q  Send-Q   Local Address:Port   Peer Address:Port Process
+LISTEN 0       80           127.0.0.1:3306        0.0.0.0:*     users:(("mariadbd",pid=3449,fd=24))
+LISTEN 0       4096        127.0.0.54:53          0.0.0.0:*     users:(("systemd-resolve",pid=483,fd=17))
+LISTEN 0       4096           0.0.0.0:22          0.0.0.0:*     users:(("sshd",pid=1073,fd=3),("systemd",pid=1,fd=144))
+LISTEN 0       4096     127.0.0.53%lo:53          0.0.0.0:*     users:(("systemd-resolve",pid=483,fd=15))
+LISTEN 0       4096              [::]:22             [::]:*     users:(("sshd",pid=1073,fd=4),("systemd",pid=1,fd=145))
+```
